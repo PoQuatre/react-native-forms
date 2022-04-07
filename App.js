@@ -3,6 +3,7 @@ import Constants from "expo-constants";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,14 +17,22 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
+    if (isLoading) return;
     console.log(data);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      reset();
+    }, 2000);
   };
 
   return (
@@ -83,6 +92,7 @@ export default function App() {
       <Button
         label="Login"
         onPress={handleSubmit(onSubmit)}
+        isLoading={isLoading}
       />
     </SafeAreaView>
   );
